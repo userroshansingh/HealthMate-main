@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="hstyles.css">
+</head>
+<body>
+    <p>
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style="top: 20px; left: 20px; width: 80px;">
+
+        <a href="add_doctor.html"><button type="button">Doctor Registration</button></a>
+        <a href="add_patient.html"><button type="button">Patient Registration</button></a>
+        <a href="doctor_details.html"><button type="button">View Doctor Details</button></a>
+        <a href="patient_details.html"><button type="button">View Patient Details</button></a>
+        <a href="diagnose_patient.html"><button type="button">Diagnose Patient</button></a>
+        <a href="patient_treatment.html"><button type="button">Patient's Treatment</button></a>
+        <a href="record_details.html"><button type="button">View Medical Record</button></a>
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style="top: 20px; left: 910px; width: 80px;">
+    </p>
+    <h1>Display Doctor Details</h1>
+    <div>
+        <form>
+            <table>
+                <tr>
+                    <td>Enter Doctor Name:</td>
+                    <td><input type="text" id="docName" name="docName"></td>
+                    <td><input type="button" id="getdoctordetails" value="Get Details"></td>
+                </tr>
+                <tr>
+                    <td>Doctor Name:</td>
+                    <td colspan="2"><div id="get_doc_name"></div></td>
+                </tr>
+                <tr>
+                    <td>Specialisation:</td>
+                    <td colspan="2"><div id="get_specialisation"></div></td>
+                </tr>
+                <tr>
+                    <td>Phone Number:</td>
+                    <td colspan="2"><div id="get_doc_phone"></div></td>
+                </tr>
+                <tr>
+                    <td>Doctor Address:</td>
+                    <td colspan="2"><div id="get_doc_addr"></div></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <footer>
+        &copy; 2023 HealthMate. All Rights Reserved.
+    </footer>
+    
+    <script>
+        $(document).ready(function () {
+            $('#getdoctordetails').click(function () {
+                var docName = $('#docName').val();
+
+                // Retrieve doctor details from local storage
+                var doctorDetailsString = localStorage.getItem('doctorDetails');
+
+                if (doctorDetailsString) {
+                    // Convert the JSON string back to an object
+                    var doctorDetails = JSON.parse(doctorDetailsString);
+
+                    // Display doctor details
+                    $('#get_doc_name').text(doctorDetails.docName);
+                    $('#get_specialisation').text(doctorDetails.specialisation);
+                    $('#get_doc_phone').text(doctorDetails.docPhone);
+                    $('#get_doc_addr').text(doctorDetails.docAddress);
+                } else {
+                    alert('Doctor details not found in local storage.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

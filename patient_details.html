@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.1.1/web3.min.js" integrity="sha512-C/TYwf93EQ6sPW4g3F9axNydQuQrAQCTOR1Gz65YK96MwrZ0KDn3qjNMAlXLYyjm84JELTYHinAfvUjbNC4fuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="hstyles.css">
+	<script src="abi.js"></script> 
+</head>
+<body>
+    <p>
+      <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style=" top: 20px; left: 20px; width: 80px;">
+
+        <a href="add_doctor.html"><button type="button">Doctor Registration</button></a>
+        <a href="add_patient.html"><button type="button">Patient Registration</button></a>
+		<a href="doctor_details.html"><button type="button">View Doctor Details</button></a>
+        <a href="patient_details.html"><button type="button">View Patient Details</button></a>
+        <a href="diagnose_patient.html"><button type="button">Diagnose Patient</button></a>
+		<a href="patient_treatment.html"><button type="button">Patient's Treatment</button></a>
+		<a href="record_details.html"><button type="button">View Medical Record</button></a>
+    <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style=" top: 20px; left: 910px; width: 80px;">
+
+    </p>
+    <h1>Display Patient Details</h1>
+    <div>
+        <form>
+            <table style="width:25%">
+              <tr>
+                <td>Enter Patient ID:</td>
+                <td><input type="text" id="pid" name="pid"></td>
+                <td><input type="button" id="getpatientdetails" value="Get Details"></td>
+              </tr>
+              <tr>
+                <td>Patient Name:</td>
+                <td colspan="2"><div id="get_pat_name"></div></td>
+              </tr>
+              <tr>
+                <td>Age:</td>
+                <td colspan="2"><div id="get_age"></div></td>
+              </tr>
+              <tr>
+                <td>Gender:</td>
+                <td colspan="2"><div id="get_gender"></div></td>
+              </tr>
+              <tr>
+                <td>Phone Number:</td>
+                <td colspan="2"><div id="get_pat_phone"></div></td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td colspan="2"><div id="get_email"></div></td>
+              </tr>
+              <tr>
+                <td>Appointment Date:</td>
+                <td colspan="2"><div id="get_date"></div></td>
+              </tr>
+              <tr>
+                <td>Doctor ID:</td>
+                <td colspan="2"><div id="get_doc_id"></div></td>
+              </tr>
+              <tr>
+                <td>Diagnosis:</td>
+                <td colspan="2"><div id="get_diagnosis"></div></td>
+              </tr>
+              <tr>
+                <td>Treatment:</td>
+                <td colspan="2"><div id="get_treatment"></div></td>
+              </tr>
+            </table>
+        </form>
+    </div>
+    <footer>
+      &copy; 2023 HealthMate. All Rights Reserved.
+  </footer>
+    <script>
+        $(document).ready(function(){
+            var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+            var contract = new web3.eth.Contract(abi, address);
+
+            $('#getpatientdetails').click(function(){
+                var id = $('#pid').val();
+
+                contract.methods.getPatientDetails(id).call().then(function(result){
+                    var name = result[1];
+                    var age = result[2];
+                    var gender = result[3];
+                    var phoneNumber = result[4];
+                    var email = result[5];
+                    var date = result[6];
+                    var docId = result[7];
+                    var diagnosis = result[8];
+                    var treatment = result[9];
+
+                    $('#get_pat_name').text(name);
+                    $('#get_age').text(age);
+                    $('#get_gender').text(gender);
+                    $('#get_pat_phone').text(phoneNumber);
+                    $('#get_email').text(email);
+                    $('#get_date').text(date);
+                    $('#get_doc_id').text(docId);
+                    $('#get_diagnosis').text(diagnosis);
+                    $('#get_treatment').text(treatment);
+                }).catch(function(error){
+                    console.error('Error:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

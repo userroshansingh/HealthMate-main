@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnose Patient</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.1.1/web3.min.js" integrity="sha512-C/TYwf93EQ6sPW4g3F9axNydQuQrAQCTOR1Gz65YK96MwrZ0KDn3qjNMAlXLYyjm84JELTYHinAfvUjbNC4fuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="hstyles.css">
+    <script src="abi.js"></script> 
+</head>
+<body>
+    <p>
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style=" top: 20px; left: 20px; width: 80px;">
+
+        <a href="add_doctor.html"><button type="button">Doctor Registration</button></a>
+        <a href="add_patient.html"><button type="button">Patient Registration</button></a>
+        <a href="doctor_details.html"><button type="button">View Doctor Details</button></a>
+        <a href="patient_details.html"><button type="button">View Patient Details</button></a>
+        <a href="diagnose_patient.html"><button type="button">Diagnose Patient</button></a>
+        <a href="patient_treatment.html"><button type="button">Patient's Treatment</button></a>
+        <a href="record_details.html"><button type="button">View Medical Record</button></a>
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style=" top: 20px; left: 910px; width: 80px;">
+
+    </p>
+    <h1>Diagnose Patient</h1>
+    <div>
+        <form id="diagnosisForm">
+            <table>
+                <tr>
+                    <td>Enter Patient ID:</td>
+                    <td><input type="text" id="patientId" name="patientId"></td>
+                </tr>
+                <tr>
+                    <td>Diagnosis:</td>
+                    <td><input type="text" id="diagnosis" name="diagnosis"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="button" id="updateDiagnosis" value="Update Diagnosis"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    
+    <script>
+        $(document).ready(function(){
+            var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+            var contract = new web3.eth.Contract(abi, address);
+
+            $('#updateDiagnosis').click(function(){
+                var patientId = $('#patientId').val();
+                var diagnosis = $('#diagnosis').val();
+
+                web3.eth.getAccounts().then(function(accounts){
+                    var acc = accounts[0];
+                    return contract.methods.updateDiagnosis(patientId, diagnosis).send({from: acc, gasPrice: '2511866450', gas: '500000'})
+                    .on('transactionHash', function(hash){
+                        alert('Transaction Hash: ' + hash);
+                    })
+                    .on('receipt', function(receipt){
+                        alert('Diagnosis Updated!\nTransaction Receipt: ' + JSON.stringify(receipt));
+                    })
+                    .on('error', function(error){
+                        alert('Error: ' + error.message);
+                    });
+                });
+            });
+        });
+    </script>
+    <div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Appointment Date</th>
+                    <th>Doctor ID</th>
+                    <th>Diagnosis</th>
+                    <th>Treatment</th>
+                </tr>
+            </thead>
+            <tbody id="recordDetails"></tbody>
+        </table>
+    </div>
+    <footer>
+        &copy; 2023 HealthMate. All Rights Reserved.
+    </footer>
+    <script>
+        $(document).ready(function(){
+            var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+            var contract = new web3.eth.Contract(abi, address);
+
+            contract.methods.getPatientCount().call().then(function(patientCount){
+                for (var i = 1; i <= patientCount; i++) {
+                    contract.methods.getPatientDetails(i).call().then(function(result){
+                        var id = result[0];
+                        var name = result[1];
+                        var age = result[2];
+                        var gender = result[3];
+                        var phoneNumber = result[4];
+                        var email = result[5];
+                        var date = result[6];
+                        var docId = result[7];
+                        var diagnosis = result[8];
+                        var treatment = result[9];
+
+                        var recordDetail = '<tr>' +
+                                              '<td>' + id + '</td>' +
+                                              '<td>' + name + '</td>' +
+                                              '<td>' + age + '</td>' +
+                                              '<td>' + gender + '</td>' +
+                                              '<td>' + phoneNumber + '</td>' +
+                                              '<td>' + email + '</td>' +
+                                              '<td>' + date + '</td>' +
+                                              '<td>' + docId + '</td>' +
+                                              '<td>' + diagnosis + '</td>' +
+                                              '<td>' + treatment + '</td>' +
+                                            '</tr>';
+
+                        $('#recordDetails').append(recordDetail);
+                    }).catch(function(error){
+                        console.error('Error:', error);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

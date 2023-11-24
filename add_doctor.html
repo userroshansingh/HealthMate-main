@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="hstyles.css">
+</head>
+<body>
+    <p>
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style="top: 20px; left: 20px; width: 80px;">
+
+        <a href="add_doctor.html"><button type="button">Doctor Registration</button></a>
+        <a href="add_patient.html"><button type="button">Patient Registration</button></a>
+        <a href="doctor_details.html"><button type="button">View Doctor Details</button></a>
+        <a href="patient_details.html"><button type="button">View Patient Details</button></a>
+        <a href="diagnose_patient.html"><button type="button">Diagnose Patient</button></a>
+        <a href="patient_treatment.html"><button type="button">Patient's Treatment</button></a>
+        <a href="record_details.html"><button type="button">View Medical Record</button></a>
+
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style="top: 20px; left: 910px; width: 80px;">
+    </p>
+    <h1>Doctor Registration</h1>
+    <div>
+        <form>
+            <table>
+                <tr>
+                    <td>Enter Doctor Name:</td>
+                    <td><input type="text" id="docName" name="docName"></td>
+                </tr>
+                <tr>
+                    <td>Specialisation:</td>
+                    <td><input type="text" id="specialisation" name="specialisation"></td>
+                </tr>
+                <tr>
+                    <td>Phone Number:</td>
+                    <td><input type="text" id="docPhone" name="docPhone"></td>
+                </tr>
+                <tr>
+                    <td>Doctor Address:</td>
+                    <td><input type="text" id="docAddress" name="docAddress"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="button" id="RegisterDoctor" value="Register Doctor"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <h3>To get details of a doctor <a href="doctor_details.html">Click Here</a></h3>
+    <footer>
+        &copy; 2023 HealthMate. All Rights Reserved.
+    </footer>
+    
+    <script>
+        $(document).ready(function () {
+            $('#RegisterDoctor').click(function () {
+                var docName = $('#docName').val();
+                var specialisation = $('#specialisation').val();
+                var docPhone = $('#docPhone').val();
+                var docAddress = $('#docAddress').val();
+
+                // Save user input to local storage
+                saveToLocalStorage(docName, specialisation, docPhone, docAddress);
+
+                alert('Doctor details saved locally!');
+            });
+
+            function saveToLocalStorage(docName, specialisation, docPhone, docAddress) {
+                // Create an object to hold doctor details
+                const doctorDetails = {
+                    docName: docName,
+                    specialisation: specialisation,
+                    docPhone: docPhone,
+                    docAddress: docAddress
+                };
+
+                // Convert the object to a JSON string and save to local storage
+                localStorage.setItem('doctorDetails', JSON.stringify(doctorDetails));
+            }
+        });
+    </script>
+</body>
+</html>

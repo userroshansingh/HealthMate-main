@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.1.1/web3.min.js" integrity="sha512-C/TYwf93EQ6sPW4g3F9axNydQuQrAQCTOR1Gz65YK96MwrZ0KDn3qjNMAlXLYyjm84JELTYHinAfvUjbNC4fuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="hstyles.css">
+    <script src="abi.js"></script> 
+</head>
+<body>
+    <p>
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style=" top: 20px; left: 20px; width: 80px;">
+
+        <a href="add_doctor.html"><button type="button">Doctor Registration</button></a>
+        <a href="add_patient.html"><button type="button">Patient Registration</button></a>
+		<a href="doctor_details.html"><button type="button">View Doctor Details</button></a>
+        <a href="patient_details.html"><button type="button">View Patient Details</button></a>
+        <a href="diagnose_patient.html"><button type="button">Diagnose Patient</button></a>
+		<a href="patient_treatment.html"><button type="button">Patient's Treatment</button></a>
+		<a href="record_details.html"><button type="button">View Medical Record</button></a>
+        <img src="https://images.vexels.com/media/users/3/208833/isolated/preview/f197ad94b57cdbf7d2b726d8ca4db99d-heart-lifeline-hospital.png" alt="Logo" style=" top: 20px; left: 910px; width: 80px;">
+
+    </p>
+    <h1>Patient Registration</h1>
+    <div>
+        <form id="patientForm">
+            <table>
+                <tr>
+                    <td>Enter Patient Name:</td>
+                    <td><input type="text" id="patName" name="patName"></td>
+                </tr>
+                <tr>
+                    <td>Age:</td>
+                    <td><input type="text" id="age" name="age"></td>
+                </tr>
+                <tr>
+                    <td>Gender:</td>
+                    <td><input type="text" id="gender" name="gender"></td>
+                </tr>
+                <tr>
+                    <td>Phone Number:</td>
+                    <td><input type="text" id="patPhone" name="patPhone"></td>
+                </tr>
+                <tr>
+                    <td>Email ID:</td>
+                    <td><input type="text" id="email" name="email"></td>
+                </tr>
+                <tr>
+                    <td>Date:</td>
+                    <td><input type="text" id="date" name="date"></td>
+                </tr>
+                <tr>
+                    <td>Doctor ID:</td>
+                    <td><input type="text" id="docId" name="docId"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="button" id="RegisterPatient" value="Register Patient"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <footer>
+        &copy; 2023 HealthMate. All Rights Reserved.
+    </footer>
+    <script>
+        $(document).ready(function(){
+            var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+            var contract = new web3.eth.Contract(abi, address);
+    
+            $('#RegisterPatient').click(function(){
+                var patName = $('#patName').val();
+                var age = $('#age').val();
+                var gender = $('#gender').val();
+                var patPhone = $('#patPhone').val();
+                var email = $('#email').val();
+                var date = $('#date').val();
+                var docId = $('#docId').val();
+    
+                web3.eth.getAccounts().then(function(accounts){
+                    var acc = accounts[0];
+                    return contract.methods.addPatient(patName, age, gender, patPhone, email, date, docId).send({from: acc, gasPrice: '2511866450', gas: '500000'})
+                    .on('transactionHash', function(hash){
+                        alert('Transaction Hash: ' + hash);
+                    })
+                    .on('receipt', function(receipt){
+                        alert('Registration Successful!\nTransaction Receipt: ' + JSON.stringify(receipt));
+                    })
+                    .on('error', function(error){
+                        alert('Error: Invalid Doctor ID ' + error.message);
+                    });
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
